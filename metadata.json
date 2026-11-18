@@ -1,0 +1,8 @@
+{
+  "name": "Remix FinSight — CA Practice \u0026 Compliance Management",
+  "description": "Smart CA Practice \u0026 Compliance Management System for A Y \u0026 COMPANY – Chartered Accountants, Jaipur.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
