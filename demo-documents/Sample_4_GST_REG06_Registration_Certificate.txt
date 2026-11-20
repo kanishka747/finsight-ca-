@@ -1,0 +1,22 @@
+======================================================================
+               GOVERNMENT OF INDIA
+   GOODS AND SERVICES TAX REGISTRATION CERTIFICATE
+               FORM GST REG-06 [See Rule 10(1)]
+======================================================================
+Registration Number (GSTIN) : 08AABCG9104M1Z7
+Legal Name of Business      : Greenfield Industries Private Limited
+Trade Name, if any          : Greenfield Packaging Solutions
+Constitution of Business    : Private Limited Company
+Address of Principal Place  : Plot 88, RIICO Industrial Area, Sitapura,
+                              Jaipur, Rajasthan, 302022
+Date of Liability           : 01-Jul-2017
+Period of Validity          : From 01-Jul-2017  To: Regular
+Type of Registration        : Regular Taxpayer
+Particulars of Approving    : Ward 4, Circle Sitapura, Commercial Taxes
+Authority                   : Department, Rajasthan
+
+Audit Notes for CA Review:
+- State Code 08 corresponds to Rajasthan.
+- PAN AABCG9104M decoded as 'C' (Company).
+- Luhn Modulo 36 checksum verified against GST portal specifications.
+======================================================================

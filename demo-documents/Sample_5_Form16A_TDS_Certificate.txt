@@ -1,0 +1,34 @@
+======================================================================
+                DIRECTORATE OF INCOME TAX (SYSTEMS)
+                FORM NO. 16A [See Rule 31(1)(b)]
+   Certificate under section 203 of the Income-tax Act, 1961 for
+          Tax Deducted at Source on Payments other than Salary
+======================================================================
+Certificate No.             : TRACES-16A-2026-981240
+Last Updated Date           : 28-Oct-2026
+Financial Year              : 2026-27 (Assessment Year: 2027-28)
+Quarter                     : Q2 (July 2026 – September 2026)
+
+DEDUCTOR DETAILS:
+Name                        : Pinnacle Technology Solutions Limited
+Address                     : 5th Floor, Cyber Park, Sitapura, Jaipur 302022
+TAN of Deductor             : JPRP01824F
+PAN of Deductor             : AABCP9012J
+
+DEDUCTEE DETAILS:
+Name of Deductee            : A Y & COMPANY (Chartered Accountants)
+Address                     : Sitapura Industrial Area, Jaipur 302022
+PAN of Deductee             : AAAFA4829K
+
+SUMMARY OF TAX DEDUCTION AT SOURCE:
+----------------------------------------------------------------------
+Section Code                : 194J (Fees for Professional / Technical Services)
+Nature of Payment           : Audit & Direct Tax Advisory Retainer
+Amount Paid / Credited (INR): Rs. 2,50,000.00
+Rate of TDS                 : 10.00 %
+Total TDS Deducted (INR)    : Rs. 25,000.00
+Challan BSR Code            : 0210042
+Date of Deposit to Govt     : 06-Oct-2026
+Challan Serial No           : 00192
+Status in 26AS / AIS        : Matched & Deposited to Central Government
+======================================================================
