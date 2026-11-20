@@ -20,7 +20,8 @@ interface LoginPageProps {
 }
 
 export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
-  const { login, registerUser, settings } = usePractice();
+  const { login, registerUser, loginWithGoogle, settings } = usePractice();
+  const [googleLoading, setGoogleLoading] = React.useState(false);
 
   const [mode, setMode] = useState<'signin' | 'signup'>('signin');
   const [email, setEmail] = useState('');
@@ -115,6 +116,21 @@ export const LoginPage: React.FC<LoginPageProps> = ({ onLoginSuccess }) => {
     setEmail(fillEmail);
     setPassword(fillPass);
     setErrorMsg(null);
+  };
+
+  const handleGoogleSignIn = async () => {
+    setErrorMsg(null);
+    setGoogleLoading(true);
+    try {
+      const res = await loginWithGoogle();
+      if (!res.success && res.error && res.error !== 'Sign-in cancelled.') {
+        setErrorMsg(res.error);
+      }
+    } catch (err: any) {
+      setErrorMsg(err.message || 'Google sign-in failed.');
+    } finally {
+      setGoogleLoading(false);
+    }
   };
 
   const handleForgotSubmit = (e: React.FormEvent) => {
