@@ -189,7 +189,7 @@ export const SettingsPage: React.FC = () => {
           className="inline-flex items-center gap-1.5 px-3.5 py-2 text-xs font-medium text-rose-300 bg-rose-500/10 border border-rose-500/35 rounded-lg hover:bg-rose-500/20 whitespace-nowrap shrink-0 transition-colors"
         >
           <RotateCcw className="w-3.5 h-3.5" />
-          Reset Demo Data
+          Reset Workspace Data
         </button>
       </div>
 
@@ -273,7 +273,7 @@ export const SettingsPage: React.FC = () => {
                   <input value={pinCode} onChange={(e) => setPinCode(e.target.value)} className={`${inputCls} font-mono`} />
                 </div>
                 <div>
-                  <label className="block font-medium text-slate-300 mb-1">ICAI FRN (Demo)</label>
+                  <label className="block font-medium text-slate-300 mb-1">ICAI FRN</label>
                   <input value={icaiRegNo} onChange={(e) => setIcaiRegNo(e.target.value)} className={`${inputCls} font-mono`} />
                 </div>
                 <div>
@@ -680,8 +680,8 @@ export const SettingsPage: React.FC = () => {
         open={resetOpen}
         onClose={() => setResetOpen(false)}
         onConfirm={resetDemoData}
-        title="Reset Demo Workspace Data"
-        message="Restore all clients, documents, compliance tasks, and settings to the default A Y & COMPANY Jaipur demo dataset?"
+        title="Reset Workspace Data"
+        message="Restore all clients, documents, compliance tasks, and settings to the default A Y & COMPANY Jaipur dataset?"
         confirmLabel="Reset Workspace"
         destructive
       />

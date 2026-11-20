@@ -94,7 +94,7 @@ export const HelpSupportPage: React.FC = () => {
               onClick={() => setActiveSection('settings')}
               className="inline-flex items-center gap-1 text-xs font-medium text-teal-400 hover:underline"
             >
-              Manage Demo Reset <ArrowRight className="w-3.5 h-3.5" />
+              Manage Workspace Reset <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>

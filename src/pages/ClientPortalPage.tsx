@@ -138,12 +138,12 @@ export const ClientPortalPage: React.FC = () => {
   };
 
   const handleDownloadReport = (docName: string) => {
-    const text = `Authorized Report Copy (Demo)\nIssued by: A Y & COMPANY, Chartered Accountants, Jaipur\nClient: ${client.name}\nDocument: ${docName}\nFinancial Year: ${selectedFY}`;
+    const text = `Authorized Report Copy\nIssued by: A Y & COMPANY, Chartered Accountants, Jaipur\nClient: ${client.name}\nDocument: ${docName}\nFinancial Year: ${selectedFY}`;
     const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `${docName.replace(/\.[^.]+$/, '')}_authorized_demo.txt`;
+    a.download = `${docName.replace(/\.[^.]+$/, '')}_authorized.txt`;
     a.click();
     URL.revokeObjectURL(url);
     addToast('Report downloaded', docName);
@@ -158,12 +158,12 @@ export const ClientPortalPage: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* Demo Role-Switch Preview Banner */}
+      {/* Role-Switch Preview Banner */}
       <div className="bg-[#0E2240] border border-teal-500/35 text-slate-100 rounded-xl px-5 py-3.5 flex flex-col md:flex-row md:items-center justify-between gap-3">
         <div className="flex items-start gap-2.5 text-xs">
           <Info className="w-4 h-4 text-teal-400 shrink-0 mt-0.5" />
           <div>
-            <span className="font-semibold text-white">Demo Client Preview Mode</span> — Viewing FinSight as{' '}
+            <span className="font-semibold text-white">Client Preview</span> — Viewing FinSight as{' '}
             <span className="text-teal-300 font-semibold">{client.name}</span>. Internal CA staff notes and other clients&apos; records are hidden. Role switching here is a preview feature, not real authentication.
           </div>
         </div>

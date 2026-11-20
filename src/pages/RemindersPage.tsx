@@ -340,7 +340,7 @@ export const RemindersPage: React.FC = () => {
                             className="inline-flex items-center gap-1 text-teal-400 font-medium hover:underline"
                           >
                             <CalendarClock className="w-3.5 h-3.5" />
-                            Send Now (Demo)
+                            Send Now
                           </button>
                         ) : (
                           <span className="text-slate-500">Logged</span>
@@ -451,7 +451,7 @@ export const RemindersPage: React.FC = () => {
               </select>
             </div>
             <div>
-              <label className="block text-xs font-medium text-slate-300 mb-1">Channel (Demo)</label>
+              <label className="block text-xs font-medium text-slate-300 mb-1">Notification Channel</label>
               <select
                 value={rChannel}
                 onChange={(e) => setRChannel(e.target.value as typeof rChannel)}

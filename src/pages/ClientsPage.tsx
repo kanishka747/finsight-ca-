@@ -160,7 +160,7 @@ export const ClientsPage: React.FC = () => {
   const handleSaveClient = (e: React.FormEvent) => {
     e.preventDefault();
     if (!fName.trim() || !fPan.trim() || !fEmail.trim()) {
-      setFormError('Client name, Demo PAN, and Email are required.');
+      setFormError('Client name, PAN, and Email are required.');
       return;
     }
     const template = SMART_ONBOARDING_CHECKLISTS[fType];
@@ -287,9 +287,9 @@ export const ClientsPage: React.FC = () => {
                 </span>
               </div>
               <p className="text-xs text-slate-400 mt-0.5 font-mono">
-                {selectedClient.clientCode} · {selectedClient.type} · Demo PAN:{' '}
+                {selectedClient.clientCode} · {selectedClient.type} · PAN:{' '}
                 {maskIdentifier(selectedClient.pan, settings.preferences.maskSensitiveIds)}
-                {selectedClient.gstin ? ` · Demo GSTIN: ${selectedClient.gstin}` : ''}
+                {selectedClient.gstin ? ` · GSTIN: ${selectedClient.gstin}` : ''}
               </p>
             </div>
           </div>
@@ -366,7 +366,7 @@ export const ClientsPage: React.FC = () => {
             <div className="lg:col-span-7 bg-[#0B1426] border border-[#1E2E4E] rounded-xl p-5 space-y-5">
               <div>
                 <h2 className="text-sm font-semibold text-slate-100 font-display mb-3">
-                  Client Profile & Tax Identifiers (Demo Data)
+                  Client Profile & Tax Identifiers
                 </h2>
                 <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-xs">
                   <div>
@@ -378,15 +378,15 @@ export const ClientsPage: React.FC = () => {
                     <dd className="font-mono text-slate-100 mt-0.5">{selectedClient.onboardingDate}</dd>
                   </div>
                   <div>
-                    <dt className="text-slate-400">Demo PAN</dt>
+                    <dt className="text-slate-400">PAN</dt>
                     <dd className="font-mono text-slate-100 mt-0.5">{selectedClient.pan}</dd>
                   </div>
                   <div>
-                    <dt className="text-slate-400">Demo GSTIN</dt>
+                    <dt className="text-slate-400">GSTIN</dt>
                     <dd className="font-mono text-slate-100 mt-0.5">{selectedClient.gstin || 'Not Applicable'}</dd>
                   </div>
                   <div>
-                    <dt className="text-slate-400">Demo TAN</dt>
+                    <dt className="text-slate-400">TAN</dt>
                     <dd className="font-mono text-slate-100 mt-0.5">{selectedClient.tan || 'Not Applicable'}</dd>
                   </div>
                   <div>
@@ -993,7 +993,7 @@ export const ClientsPage: React.FC = () => {
                   <th className="py-3 px-4">ID</th>
                   <th className="py-3 px-4">Client Name</th>
                   <th className="py-3 px-4">Type</th>
-                  <th className="py-3 px-4">Demo PAN / GSTIN</th>
+                  <th className="py-3 px-4">PAN / GSTIN</th>
                   <th className="py-3 px-4">Assigned Staff</th>
                   <th className="py-3 px-4 text-right">Risk Score</th>
                   <th className="py-3 px-4">Status</th>
@@ -1192,11 +1192,11 @@ export const ClientsPage: React.FC = () => {
 
           <div className="pt-3 border-t border-[#172540]">
             <h3 className="text-xs font-semibold text-slate-200 uppercase tracking-wider mb-3">
-              Tax Information (Demo)
+              Tax Information
             </h3>
             <div className="grid grid-cols-1 sm:grid-cols-4 gap-3">
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Demo PAN *</label>
+                <label className="block text-xs font-medium text-slate-300 mb-1">PAN *</label>
                 <input
                   required
                   value={fPan}
@@ -1206,7 +1206,7 @@ export const ClientsPage: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Demo GSTIN</label>
+                <label className="block text-xs font-medium text-slate-300 mb-1">GSTIN</label>
                 <input
                   value={fGstin}
                   onChange={(e) => setFGstin(e.target.value)}
@@ -1215,7 +1215,7 @@ export const ClientsPage: React.FC = () => {
                 />
               </div>
               <div>
-                <label className="block text-xs font-medium text-slate-300 mb-1">Demo TAN</label>
+                <label className="block text-xs font-medium text-slate-300 mb-1">TAN</label>
                 <input
                   value={fTan}
                   onChange={(e) => setFTan(e.target.value)}

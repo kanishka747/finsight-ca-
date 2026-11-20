@@ -104,7 +104,7 @@ export const DocumentsPage: React.FC = () => {
         uploadedBy: currentUser.name,
         uploadedByRole: 'Staff',
         status: 'Pending Review',
-        previewSummary: `Frontend demo file entry (${file.name}, ${sizeStr}) recorded locally in browser storage.`,
+        previewSummary: `Document entry (${file.name}, ${sizeStr}) recorded locally in browser storage.`,
       });
     });
   };
@@ -197,7 +197,7 @@ export const DocumentsPage: React.FC = () => {
     const client = clients.find((c) => c.id === doc.clientId);
     const content = [
       `FinSight — A Y & COMPANY (Chartered Accountants, Jaipur)`,
-      `Frontend Demo Document Record Summary`,
+      `Document Record Summary`,
       `--------------------------------------------------`,
       `Document Name : ${doc.name}`,
       `Client        : ${client?.name || doc.clientId} (${client?.clientCode || ''})`,

@@ -179,7 +179,7 @@ export const CompliancePage: React.FC = () => {
         <div className="flex items-center gap-2 text-xs text-slate-300">
           <Info className="w-4 h-4 text-teal-400 shrink-0" />
           <span>
-            Preloaded dates are configurable demo deadlines. Statutory due dates vary by client turnover, scheme (QRMP), and government extensions—authorized staff can edit any due date directly.
+            Preloaded dates are upcoming deadlines. Statutory due dates vary by client turnover, scheme (QRMP), and government extensions—authorized staff can edit any due date directly.
           </span>
         </div>
         <div className="flex items-center gap-2 shrink-0">
@@ -298,7 +298,7 @@ export const CompliancePage: React.FC = () => {
                   <th className="py-3 px-4">Client</th>
                   <th className="py-3 px-4">Compliance Task</th>
                   <th className="py-3 px-4">FY</th>
-                  <th className="py-3 px-4">Due Date (Demo)</th>
+                  <th className="py-3 px-4">Due Date</th>
                   <th className="py-3 px-4">Assigned Staff</th>
                   <th className="py-3 px-4">Priority</th>
                   <th className="py-3 px-4">Status</th>
