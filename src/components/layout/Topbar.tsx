@@ -26,7 +26,7 @@ const SECTION_TITLES: Record<NavSection, string> = {
   financial: 'Financial Overview',
   reminders: 'Reminders & Notifications',
   tasks: 'Tasks & Workflow',
-  portal: 'Client Portal (Demo Preview)',
+  portal: 'Client Portal',
   reports: 'Reports & Analytics',
   settings: 'Settings',
   help: 'Help & Support',
@@ -439,7 +439,7 @@ export const Topbar: React.FC<{
           )}
         </div>
 
-        {/* User Profile & Demo Staff Switcher */}
+        {/* User Profile & Staff Switcher */}
         <div ref={profileRef} className="relative">
           <button
             type="button"
@@ -469,7 +469,7 @@ export const Topbar: React.FC<{
                 </div>
               </div>
               <div className="px-3 py-1.5 text-[11px] font-semibold text-slate-500">
-                Switch Active Staff (Demo)
+                Switch Active Staff
               </div>
               {employees.map((emp) => (
                 <button
