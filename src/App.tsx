@@ -22,6 +22,7 @@ import { ClientPortalPage } from './pages/ClientPortalPage';
 import { ReportsPage } from './pages/ReportsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { HelpSupportPage } from './pages/HelpSupportPage';
+import { LoginPage } from './pages/LoginPage';
 
 const AppShell: React.FC = () => {
   const {
@@ -30,8 +31,7 @@ const AppShell: React.FC = () => {
     currentUser,
     employees,
     setCurrentEmployeeId,
-    demoLocked,
-    unlockDemoSession,
+    isAuthenticated,
     settings,
   } = usePractice();
 
@@ -49,50 +49,8 @@ const AppShell: React.FC = () => {
     return () => window.removeEventListener('keydown', handleGlobalKey);
   }, []);
 
-  if (demoLocked) {
-    return (
-      <div className="min-h-screen bg-[#050A14] flex items-center justify-center p-4">
-        <div className="w-full max-w-md bg-[#0B1426] border border-[#1E2E4E] rounded-xl p-6 space-y-5 shadow-2xl">
-          <div className="flex items-center gap-3">
-            <span className="w-9 h-9 rounded-lg bg-teal-600 text-white font-display font-bold flex items-center justify-center">
-              FS
-            </span>
-            <div>
-              <h1 className="text-lg font-bold text-slate-100 font-display">FinSight</h1>
-              <p className="text-xs text-slate-400">
-                {settings.firmName} · {settings.city}, {settings.state}
-              </p>
-            </div>
-          </div>
-
-          <p className="text-xs text-slate-300">
-            Session locked. Select a staff profile below to resume the FinSight workspace.
-          </p>
-
-          <div className="space-y-2">
-            {employees.map((emp) => (
-              <button
-                key={emp.id}
-                type="button"
-                onClick={() => {
-                  setCurrentEmployeeId(emp.id);
-                  unlockDemoSession();
-                }}
-                className="w-full px-3.5 py-2.5 text-left bg-[#081020] border border-[#1D2D4C] rounded-lg hover:border-teal-500 hover:bg-[#111E38] flex items-center justify-between transition-colors"
-              >
-                <div>
-                  <div className="text-xs font-semibold text-slate-100">{emp.name}</div>
-                  <div className="text-[11px] text-slate-400">
-                    {emp.role} · {emp.department}
-                  </div>
-                </div>
-                <span className="text-xs font-medium text-teal-400">Resume</span>
-              </button>
-            ))}
-          </div>
-        </div>
-      </div>
-    );
+  if (!isAuthenticated) {
+    return <LoginPage />;
   }
 
   const renderPage = () => {
