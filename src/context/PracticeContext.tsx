@@ -46,6 +46,8 @@ import {
   ToastMessage,
   ValidationIssue,
 } from '../types';
+import { auth, googleProvider, signInWithPopup, signOut, onAuthStateChanged } from '../lib/firebase';
+
 
 const STORAGE_KEY = 'finsight_ayco_practice_v1';
 
@@ -223,6 +225,8 @@ interface PracticeContextValue extends PersistedState {
   login: (email: string, password: string, remember?: boolean) => Promise<{ success: boolean; error?: string }>;
   logout: () => void;
   registerUser: (data: { name: string; email: string; password: string; role: string; firmName?: string }) => Promise<{ success: boolean; error?: string }>;
+  loginWithGoogle: () => Promise<{ success: boolean; error?: string }>;
+  googleUser: { name: string; email: string; photoURL?: string } | null;
 }
 
 const PracticeContext = createContext<PracticeContextValue | null>(null);
@@ -271,18 +275,66 @@ export const PracticeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     'accounts@heritagehosp.in': 'Client@2026',
   });
 
-  // On mount, restore employee from persisted auth
+  const [googleUser, setGoogleUser] = React.useState<{ name: string; email: string; photoURL?: string } | null>(null);
+
+  // On mount, restore employee from persisted auth OR listen to Firebase Google auth
   React.useEffect(() => {
-    try {
-      const saved = localStorage.getItem('finsight_auth');
-      if (saved) {
-        const { employeeId } = JSON.parse(saved);
-        if (employeeId) {
-          setState((prev) => ({ ...prev, currentEmployeeId: employeeId }));
-          setIsAuthenticated(true);
-        }
+    // Listen to Firebase Auth state (handles Google sign-in persistence)
+    const unsubscribe = onAuthStateChanged(auth, (firebaseUser) => {
+      if (firebaseUser) {
+        // Google-signed-in user
+        const displayName = firebaseUser.displayName || firebaseUser.email || 'User';
+        const email = (firebaseUser.email || '').toLowerCase();
+        setGoogleUser({
+          name: displayName,
+          email,
+          photoURL: firebaseUser.photoURL || undefined,
+        });
+        // Try to match to an existing employee
+        setState((prev) => {
+          const matched = prev.employees.find((e: any) => e.email?.toLowerCase() === email);
+          if (matched) {
+            return { ...prev, currentEmployeeId: matched.id };
+          }
+          // Create a lightweight employee entry for new Google users
+          const newEmp: any = {
+            id: `google-${firebaseUser.uid.slice(0, 8)}`,
+            name: displayName,
+            email,
+            role: 'CA Partner',
+            department: 'Management',
+            phone: '',
+            avatarInitials: displayName.split(' ').map((w: string) => w[0]).join('').slice(0, 2).toUpperCase(),
+            joinDate: new Date().toISOString().slice(0, 10),
+            active: true,
+            specializations: [],
+          };
+          const alreadyAdded = prev.employees.find((e: any) => e.id === newEmp.id);
+          return {
+            ...prev,
+            employees: alreadyAdded ? prev.employees : [...prev.employees, newEmp],
+            currentEmployeeId: newEmp.id,
+          };
+        });
+        setIsAuthenticated(true);
+      } else {
+        // No Firebase user — check localStorage for email/password session
+        setGoogleUser(null);
+        try {
+          const saved = localStorage.getItem('finsight_auth');
+          if (saved) {
+            const { employeeId } = JSON.parse(saved);
+            if (employeeId) {
+              setState((prev) => ({ ...prev, currentEmployeeId: employeeId }));
+              setIsAuthenticated(true);
+              return;
+            }
+          }
+        } catch {}
+        setIsAuthenticated(false);
       }
-    } catch {}
+    });
+    return () => unsubscribe();
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -1292,8 +1344,24 @@ export const PracticeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
 
   const logout = () => {
     setIsAuthenticated(false);
+    setGoogleUser(null);
     localStorage.removeItem('finsight_auth');
+    // Also sign out of Firebase (handles Google sessions)
+    signOut(auth).catch(() => {});
     addToast('Signed out', 'You have been signed out of FinSight.', 'info');
+  };
+
+  const loginWithGoogle = async (): Promise<{ success: boolean; error?: string }> => {
+    try {
+      await signInWithPopup(auth, googleProvider);
+      // onAuthStateChanged will fire and set isAuthenticated + googleUser
+      return { success: true };
+    } catch (err: any) {
+      if (err.code === 'auth/popup-closed-by-user') {
+        return { success: false, error: 'Sign-in cancelled.' };
+      }
+      return { success: false, error: err.message || 'Google sign-in failed.' };
+    }
   };
 
   const registerUser = async (data: { name: string; email: string; password: string; role: string; firmName?: string }): Promise<{ success: boolean; error?: string }> => {
@@ -1396,6 +1464,8 @@ export const PracticeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         login,
         logout,
         registerUser,
+        loginWithGoogle,
+        googleUser,
       }}
     >
       {children}
