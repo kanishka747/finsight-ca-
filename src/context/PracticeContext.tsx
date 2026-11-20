@@ -219,9 +219,10 @@ interface PracticeContextValue extends PersistedState {
   updateEmployee: (id: string, patch: Partial<Employee>) => void;
   updatePermission: (role: RolePermission['role'], field: keyof Omit<RolePermission, 'role'>, val: boolean) => void;
   resetDemoData: () => void;
-  logoutDemoSession: () => void;
-  demoLocked: boolean;
-  unlockDemoSession: () => void;
+  isAuthenticated: boolean;
+  login: (email: string, password: string, remember?: boolean) => Promise<{ success: boolean; error?: string }>;
+  logout: () => void;
+  registerUser: (data: { name: string; email: string; password: string; role: string; firmName?: string }) => Promise<{ success: boolean; error?: string }>;
 }
 
 const PracticeContext = createContext<PracticeContextValue | null>(null);
@@ -248,7 +249,42 @@ export const PracticeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
   >(null);
   const [copilotOpen, setCopilotOpen] = useState(false);
   const [queuedCopilotPrompt, setQueuedCopilotPrompt] = useState<string | null>(null);
-  const [demoLocked, setDemoLocked] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(() => {
+    // Check localStorage for persisted auth
+    try {
+      const saved = localStorage.getItem('finsight_auth');
+      if (saved) {
+        const { employeeId } = JSON.parse(saved);
+        if (employeeId) return true;
+      }
+    } catch {}
+    return false;
+  });
+
+  // In-memory credential store (email -> password)
+  const credentialsRef = React.useRef<Record<string, string>>({
+    'aditya.yadav@aycompany.in': 'Partner@2026',
+    'neha.sharma@aycompany.in': 'Staff@2026',
+    'rohan.verma@aycompany.in': 'Staff@2026',
+    'priya.agarwal@aycompany.in': 'Staff@2026',
+    'ankit.k@aycompany.in': 'Staff@2026',
+    'accounts@heritagehosp.in': 'Client@2026',
+  });
+
+  // On mount, restore employee from persisted auth
+  React.useEffect(() => {
+    try {
+      const saved = localStorage.getItem('finsight_auth');
+      if (saved) {
+        const { employeeId } = JSON.parse(saved);
+        if (employeeId) {
+          setState((prev) => ({ ...prev, currentEmployeeId: employeeId }));
+          setIsAuthenticated(true);
+        }
+      }
+    } catch {}
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const openCopilotWithPrompt = (prompt?: string) => {
     if (prompt) setQueuedCopilotPrompt(prompt);
@@ -1231,13 +1267,62 @@ export const PracticeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     addToast('Demo workspace reset', 'All sample data for A Y & COMPANY restored.', 'info');
   };
 
-  const logoutDemoSession = () => {
-    setDemoLocked(true);
-    addToast('Demo session locked', 'Select a role to resume FinSight preview.', 'info');
+  const login = async (email: string, password: string, remember = false): Promise<{ success: boolean; error?: string }> => {
+    const normalizedEmail = email.trim().toLowerCase();
+    const storedPassword = credentialsRef.current[normalizedEmail];
+    if (!storedPassword) {
+      return { success: false, error: 'No account found with this email address.' };
+    }
+    if (storedPassword !== password) {
+      return { success: false, error: 'Incorrect password. Please try again.' };
+    }
+    // Find matching employee
+    const emp = (state.employees as any[]).find(
+      (e: any) => e.email?.toLowerCase() === normalizedEmail
+    );
+    const employeeId = emp?.id || state.currentEmployeeId;
+    setState((prev) => ({ ...prev, currentEmployeeId: employeeId }));
+    setIsAuthenticated(true);
+    if (remember) {
+      localStorage.setItem('finsight_auth', JSON.stringify({ employeeId }));
+    }
+    addToast('Welcome back!', `Signed in as ${emp?.name || normalizedEmail}.`, 'success');
+    return { success: true };
   };
 
-  const unlockDemoSession = () => {
-    setDemoLocked(false);
+  const logout = () => {
+    setIsAuthenticated(false);
+    localStorage.removeItem('finsight_auth');
+    addToast('Signed out', 'You have been signed out of FinSight.', 'info');
+  };
+
+  const registerUser = async (data: { name: string; email: string; password: string; role: string; firmName?: string }): Promise<{ success: boolean; error?: string }> => {
+    const normalizedEmail = data.email.trim().toLowerCase();
+    if (credentialsRef.current[normalizedEmail]) {
+      return { success: false, error: 'An account with this email already exists.' };
+    }
+    const newEmp: any = {
+      id: `emp-${Date.now()}`,
+      name: data.name,
+      email: normalizedEmail,
+      role: data.role === 'partner' ? 'CA Partner' : data.role === 'client' ? 'Client' : 'CA Staff',
+      department: data.role === 'client' ? 'Client' : 'Accounts',
+      phone: '',
+      avatarInitials: data.name.split(' ').map((w: string) => w[0]).join('').slice(0, 2).toUpperCase(),
+      joinDate: new Date().toISOString().slice(0, 10),
+      active: true,
+      specializations: [],
+    };
+    credentialsRef.current[normalizedEmail] = data.password;
+    setState((prev) => ({
+      ...prev,
+      employees: [...prev.employees, newEmp],
+      currentEmployeeId: newEmp.id,
+    }));
+    setIsAuthenticated(true);
+    localStorage.setItem('finsight_auth', JSON.stringify({ employeeId: newEmp.id }));
+    addToast('Account created!', `Welcome to FinSight, ${data.name}.`, 'success');
+    return { success: true };
   };
 
   return (
@@ -1307,9 +1392,10 @@ export const PracticeProvider: React.FC<{ children: React.ReactNode }> = ({ chil
         updateEmployee,
         updatePermission,
         resetDemoData,
-        logoutDemoSession,
-        demoLocked,
-        unlockDemoSession,
+        isAuthenticated,
+        login,
+        logout,
+        registerUser,
       }}
     >
       {children}
